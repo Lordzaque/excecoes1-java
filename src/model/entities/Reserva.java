@@ -9,9 +9,9 @@ public class Reserva {
 	private Integer numeroQuarto;
 	private Date checkIn;
 	private Date checkOut;
-	
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	public Reserva(Integer roomNumber, Date checkIn, Date checkOut) {
 		this.numeroQuarto = roomNumber;
 		this.checkIn = checkIn;
@@ -33,26 +33,29 @@ public class Reserva {
 	public Date getCheckOut() {
 		return checkOut;
 	}
-	
-	public long duracao() { 
+
+	public long duracao() {
 		long diff = checkOut.getTime() - checkIn.getTime();
-		 return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
-	
-	public void updateDates(Date checkIn, Date checkOut) {
+
+	public String updateDates(Date checkIn, Date checkOut) {
+        Date now = new Date();
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "As datas de reserva para atualização devem ser datas futuras!";
+		}
+		if (!checkOut.after(checkIn)) {
+			return "A data de check-out deve ser posterior à data de check-in!";
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
+		
 	}
+
 	@Override
-	public String toString() { 	
-		return "Quarto "
-				+ numeroQuarto
-				+ ", check-in: "
-				+ sdf.format(checkIn)
-				+ ", check-out: "
-				+ sdf.format(checkOut)
-				+ ", "
-				+ duracao()
-				+ " noites";
+	public String toString() {
+		return "Quarto " + numeroQuarto + ", check-in: " + sdf.format(checkIn) + ", check-out: " + sdf.format(checkOut)
+				+ ", " + duracao() + " noites";
 	}
 }
